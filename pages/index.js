@@ -10,7 +10,8 @@ import { getAllBlogs } from 'lib/api';
 
 export default function Home({blogs}) {
   const [filter, setFilter] = useState({
-    view: { list: 0 }
+    view: { list: 0 },
+    date: { asc: 0 }
   });
 
     // loadMore: to load more data
@@ -51,7 +52,7 @@ export default function Home({blogs}) {
   )
 }
 export async function getStaticProps() {
-  const blogs = await getAllBlogs({offset: 0});
+  const blogs = await getAllBlogs({offset: 0, date: 'desc'});
   return {
     props: {
       blogs
