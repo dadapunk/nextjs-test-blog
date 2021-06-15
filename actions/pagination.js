@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useSWRPages } from 'swr';
 import { useGetBlogs } from 'actions';
 import { Col } from 'react-bootstrap';
 import CardItem from 'components/CardItem';
@@ -64,7 +66,7 @@ export const useGetBlogsPages = ({blogs, filter}) => {
     // index: number of current page
     (SWR, index) => {
       if (SWR.data && SWR.data.length === 0) { return null; }
-      return (index + 1) * 3;
+      return (index + 1) * 6;
     },
     [filter]
   )
