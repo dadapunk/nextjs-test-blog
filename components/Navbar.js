@@ -2,15 +2,16 @@
 import { Navbar, Nav } from 'react-bootstrap';
 import Link from 'next/link'
 
-const BlogNavbar = () => {
+const BlogNavbar = ({theme, toggleTheme}) => {
   return (
     <Navbar
+      variant={theme.type}
       className="fj-navbar fj-nav-base"
       bg="transparent"
       expand="lg" >
       <Navbar.Brand className="fj-navbar-brand">
         <Link href="/">
-          <a>Sebastian Velásquez</a>
+        <a style={{color: theme.fontColor}}>Sebastián Velásquez</a>
         </Link>      
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -23,6 +24,9 @@ const BlogNavbar = () => {
               </Link>
             }
           />
+           <button className="btn btn-success" onClick={toggleTheme}>
+            {theme.type}
+          </button>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

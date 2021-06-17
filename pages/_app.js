@@ -1,3 +1,4 @@
+import ThemeProvider from 'providers/ThemeProvider';
 import { library, config } from '@fortawesome/fontawesome-svg-core';
 import {
   faBorderAll,
@@ -13,8 +14,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'styles/index.scss';
 import 'highlight.js/styles/darcula.css';
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
-}
-
-export default MyApp
+export default ({Component, pageProps}) =>
+  <ThemeProvider>
+    <Component {...pageProps} />
+  </ThemeProvider>
