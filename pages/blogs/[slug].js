@@ -50,7 +50,8 @@ export async function getStaticProps({params, preview = false, previewData}) {
   // Todo: pass preview to getBlogBySlug and fetch draft blog
   const blog = await getBlogBySlug(params.slug, preview);
   return {
-    props: {blog, preview}
+    props: {blog, preview},
+    unstable_revalidate: 1
   }
 }
 export async function getStaticPaths() {
