@@ -1,40 +1,56 @@
+
+import { useEffect, useState } from 'react';
 import PageLayout from 'components/PageLayout';
 import BlogHeader from 'components/BlogHeader';
 import ErrorPage from 'next/error';
-import BlogContent from 'components/BlogContent';
-import { getBlogBySlug, getAllBlogs } from 'lib/api';
+import { getBlogBySlug, getAllBlogs, onBlogUpdate } from 'lib/api';
 import { Row, Col } from 'react-bootstrap'
 import { urlFor } from 'lib/api';
 import moment from 'moment';
 import { useRouter } from 'next/router';
+
+import BlogContent from 'components/BlogContent';
 import PreviewAlert from 'components/PreviewAlert';
 
-const BlogDetail = ({blog, preview}) => {
+const BlogDetail = ({blog: initialBlog, preview}) => {
   const router = useRouter();
+  const [blog, setBlog] = useState(initialBlog);
 
-  if (!router.isFallback && !blog?.slug) {
-    return <ErrorPage statusCode="404"/>
-  }
+  useEffect(() => {
+    let sub;
+    if (preview) {
+      sub = onBlogUpdate(blog.slug)
+        .subscribe(update => {
+          setBlog(update.result)
+        })
+    }
+
+    return () => sub && sub.unsubscribe()
+  }, [])
+
+  // if (!router.isFallback && !blog?.slug) {
+  //   return <ErrorPage statusCode="404"/>
+  // }
 
   if (router.isFallback) {
-    console.log('Loading fallback page')
     return (
       <PageLayout className="blog-detail-page">
         Loading...
       </PageLayout>
     )
   }
+
   return (
     <PageLayout className="blog-detail-page">
       <Row>
         <Col md={{ span: 10, offset: 1 }}>
-        { preview && <PreviewAlert /> }
+          { preview && <PreviewAlert /> }
           <BlogHeader
             title={blog.title}
             subtitle={blog.subtitle}
             coverImage={urlFor(blog.coverImage).height(600).url()}
             author={blog.author}
-            date={moment(blog.date).format('LLL')}
+            date={moment(blog.date).format('LL')}
           />
           <hr/>
           { blog.content &&
@@ -45,15 +61,16 @@ const BlogDetail = ({blog, preview}) => {
     </PageLayout>
   )
 }
-// TODO: Introduce fallback
+
 export async function getStaticProps({params, preview = false, previewData}) {
-  // Todo: pass preview to getBlogBySlug and fetch draft blog
   const blog = await getBlogBySlug(params.slug, preview);
   return {
-    props: {blog, preview},
+    props: { blog, preview },
     unstable_revalidate: 1
   }
 }
+
+// TODO: Introduce fallback
 export async function getStaticPaths() {
   const blogs = await getAllBlogs();
   const paths = blogs?.map(b => ({params: {slug: b.slug}}));
@@ -62,4 +79,5 @@ export async function getStaticPaths() {
     fallback: true
   }
 }
+
 export default BlogDetail;

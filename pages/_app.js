@@ -1,3 +1,5 @@
+
+
 import ThemeProvider from 'providers/ThemeProvider';
 import { library, config } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -13,15 +15,15 @@ library.add(
   faSun,
   faMoon,
   faList,
-  faBorderAll, 
-  faSortNumericDown, 
+  faBorderAll,
+  faSortNumericDown,
   faSortNumericUp);
 
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'styles/index.scss';
 import 'highlight.js/styles/darcula.css';
 import "react-toggle/style.css"
+import 'styles/index.scss';
 
 export default ({Component, pageProps}) =>
   <ThemeProvider>
